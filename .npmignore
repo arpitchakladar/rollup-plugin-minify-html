@@ -1,0 +1,8 @@
+src
+node_modules
+node_modules/**
+tsconfig.json
+yarn.lock
+**.log
+.git
+.gitignore
