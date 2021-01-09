@@ -6,10 +6,10 @@ Minify html files with html-minifer
 
 ```bash
 # yarn
-yarn add -D rollup-plugin-copy
+yarn add -D rollup-plugin-minify-html
 
 # npm
-npm install rollup-plugin-copy --save-dev
+npm install rollup-plugin-minify-html --save-dev
 ```
 
 ## Usage
