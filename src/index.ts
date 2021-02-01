@@ -24,7 +24,7 @@ export const minifyHTML = (options: RollupPluginMinifyHTMLOptions = {}): Plugin 
 					});
 
 					await new Promise<void>((resolve, reject) => {
-						fs.mkdir(path.dirname(target.dest), (err) => {
+						fs.mkdir(path.dirname(target.dest), { recursive: true }, (err) => {
 							if (err) reject(err);
 							resolve();
 						});
