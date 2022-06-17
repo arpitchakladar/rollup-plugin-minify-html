@@ -35,7 +35,7 @@ export default {
 					}
 				}
 			],
-			minifyOptions: {
+			minifierOptions: {
 				collapseWhitespace: true,
 				minifyCSS: true,
 				minifyJS: false,
