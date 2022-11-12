@@ -74,7 +74,7 @@ Type: `string` | Default: `buildEnd`
 
 ## Original Author
 
-[Arpit Chakladar](https://github.com/arpitchakladar)
+[Arpit Chakladar](https://github.com/anaialar)
 
 ## License
 
