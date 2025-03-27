@@ -1,6 +1,6 @@
 {
 	"name": "rollup-plugin-minify-html",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Minify html files with html-minifer",
 	"main": "dist/index.js",
 	"author": "Arpit Chakladar",
@@ -19,7 +19,7 @@
 		"html-minifier": "^4.0.0"
 	},
 	"peerDependencies": {
-		"rollup": "^2.36.1"
+		"rollup": ">=2 <5"
 	},
 	"browserslist": {
 		"production": [

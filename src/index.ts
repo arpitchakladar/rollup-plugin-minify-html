@@ -40,22 +40,16 @@ export const minifyHTML = (options: RollupPluginMinifyHTMLOptions = {}): Plugin 
 		// Optimize all HTML files in the final Rollup output directory (if enabled)
 		generateBundle: async (_, bundle) => {
 			if (!minifyOutput) return; // Skip if disabled
-			console.log(bundle)
 
-			for (const fileName of Object.keys(bundle)) {
-				if (fileName.endsWith(".html")) {
-					const file = bundle[fileName];
-
-					if ("source" in file) {
-						try {
-							file.source = minify(file.source.toString(), minifierOptions);
-						} catch (error) {
-							console.error(`Error minifying ${fileName}:`, error);
-						}
+			for (const [fileName, file] of Object.entries(bundle)) {
+				if (file.type === "asset" && fileName.endsWith(".html") && "source" in file) {
+					try {
+						file.source = minify(file.source.toString(), minifierOptions);
+					} catch (error) {
+						console.error(`Error minifying ${fileName}:`, error);
 					}
 				}
 			}
 		}
 	};
 };
-
