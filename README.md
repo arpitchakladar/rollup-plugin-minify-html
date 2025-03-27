@@ -72,6 +72,12 @@ Type: `string` | Default: `buildEnd`
 
 [Rollup hook](https://rollupjs.org/guide/en/#hooks) the plugin should use. By default, plugin runs when rollup has finished bundling, before bundle is written to disk.
 
+#### minifyOutput
+
+Type: `boolean` | Default: `true`
+
+If `true`, all HTML files in the final Rollup output directory will be minified.
+
 ## Original Author
 
 [Arpit Chakladar](https://github.com/anaialar)

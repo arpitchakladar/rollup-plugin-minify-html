@@ -1,5 +1,5 @@
 import path from "path";
-import fs from "fs";
+import fs from "fs/promises";
 import { minify } from "html-minifier";
 import type { Plugin } from "rollup";
 import type { RollupPluginMinifyHTMLOptions } from "../index";
@@ -8,36 +8,54 @@ export const minifyHTML = (options: RollupPluginMinifyHTMLOptions = {}): Plugin 
 	const {
 		targets = [],
 		hook = "buildEnd",
-		minifierOptions = {}
+		minifierOptions = {},
+		minifyOutput = true, // Toggle for final output minification
 	} = options;
 
 	return {
 		name: "minify-html",
+
+		// Optimize the specified HTML files before copying
 		[hook]: async () => {
 			for (const target of targets) {
 				if (target.src && target.dest) {
-					const html = await new Promise<string>((resolve, reject) => {
-						fs.readFile(target.src, (err, data) => {
-							if (err) reject(err);
-							resolve(data.toString("utf-8"));
-						});
-					});
+					try {
+						const html = await fs.readFile(target.src, "utf-8");
 
-					await new Promise<void>((resolve, reject) => {
-						fs.mkdir(path.dirname(target.dest), { recursive: true }, (err) => {
-							if (err) reject(err);
-							resolve();
-						});
-					});
+						// Ensure destination directory exists
+						await fs.mkdir(path.dirname(target.dest), { recursive: true });
 
-					await new Promise<void>((resolve, reject) => {
-						fs.writeFile(target.dest, minify(html, { ...minifierOptions, ...target.minifierOptions }), (err) => {
-							if (err) reject(err);
-							resolve();
-						});
-					});
+						// Minify and write HTML file
+						await fs.writeFile(
+							target.dest,
+							minify(html, { ...minifierOptions, ...target.minifierOptions })
+						);
+					} catch (error) {
+						console.error(`Error processing ${target.src}:`, error);
+					}
+				}
+			}
+		},
+
+		// Optimize all HTML files in the final Rollup output directory (if enabled)
+		generateBundle: async (_, bundle) => {
+			if (!minifyOutput) return; // Skip if disabled
+			console.log(bundle)
+
+			for (const fileName of Object.keys(bundle)) {
+				if (fileName.endsWith(".html")) {
+					const file = bundle[fileName];
+
+					if ("source" in file) {
+						try {
+							file.source = minify(file.source.toString(), minifierOptions);
+						} catch (error) {
+							console.error(`Error minifying ${fileName}:`, error);
+						}
+					}
 				}
 			}
 		}
 	};
 };
+
